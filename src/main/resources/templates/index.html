@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!--every thing must be in xhtml format-->
+	<meta charset="UTF-8"/>
+	<title>MVS Data Management</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<h1>Mobile Visual Search application</h1>
+
+<!--<img src="/rest/file?filename=testFile.png&folder=test">-->
+	<!--<img src="/userCompany/file?folder=test&filename=testFile"/>-->
+	<!--FIXME: testing!!!!!-->
+	<div class="container" ng-app="indexTestApp" ng-controller="indexTestController">
+		<div ng-repeat="comp in companies" id="{{comp.id}}">
+			<div class="col-sm-12">
+				<span >Company   : {{comp.companyName}}</span>
+			</div>
+			<div class="col-sm-12">
+				<span>Category  : {{comp.category}}</span>
+			</div>
+			<div class="col-sm-12">
+				<span>Address   : {{comp.address}}</span>
+			</div>
+			<div class="col-sm-12">
+				<span>PostalCode: {{comp.postalCode}}</span>
+			</div>
+
+			<ul class="list-group container">
+				<li class="list-group-item col-sm-12" ng-repeat="us in comp.userList">
+					<span class="col-sm-4">Name: {{us.fullName}}</span>
+					<span class="col-sm-4">Username: {{us.userName}}</span>
+					<span class="col-sm-4">Email: {{us.email}}</span>
+				</li>
+			</ul>
+			<ul class="list-group container" >
+				<li class="list-group-item col-sm-12" ng-repeat="prod in comp.productList">
+					<span class="col-sm-3">Id: {{prod.prodId}}</span>
+					<span class="col-sm-3">Name: {{prod.prodName}}</span>
+					<span class="col-sm-3">Cat: {{prod.prodCategory}}</span>
+					<span class="col-sm-3">Price: {{prod.price}}</span>
+					<!--<span class="col-sm-3">stock: {{prod.price}}</span>-->
+					<span class="col-sm-12">Images</span>
+					<ul class="list-group" container>
+						<li class="list-group-item col-sm-6" ng-repeat="img in prod.imageList">
+							<div>
+								<img ng-src="/rest/file?folder={{img.folder}}&filename={{img.fileName}}" class="thumbnail">
+								<br>
+								<span>Name: {{img.imgName}}</span>
+								<span>Des: {{img.descript}}</span>
+							</div>
+						</li>
+						<li class="list-group-item col-sm-12">
+							<form class="form-inline" id="imgForm_{{comp.id}}_{{prod.id}}">
+								<input type="hidden" name="companyId" value="{{comp.id}}">
+								<input type="hidden" name="dateCreated" value="">
+								<div class="form-group">
+									<label for="imgName">Name:</label>
+									<input type="text" class="form-control" id="imgName" name="imgName" required>
+								</div>
+								<div class="form-group">
+									<label for="descript">Des:</label>
+									<input type="text" class="form-control" id="descript" name="descript">
+								</div>
+								<div class="form-group">
+									<label for="file">File:</label>
+									<input type="file" class="form-control" id="file" name="file">
+								</div>
+								<div class="form-group">
+									<button type="submit" ng-click="uploadImg(comp.id, prod.id)">Submit</button>
+								</div>
+							</form>
+						</li>
+					</ul>
+				</li>
+				<li class="list-group-item col-sm-12">
+					New product:
+					<!--<div class="container">-->
+					<form class="form-horizontal">
+						<div class="form-group">
+							<label for="prodId" class="control-label col-sm-2">Product Id:</label>
+							<div class="col-sm-10">
+								<input type="text" id="prodId" class="form-control" name="prodId" ng-model="comp.prodFormData.prodId">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="prodName" class="control-label col-sm-2">Name:</label>
+							<div class="col-sm-10">
+								<input type="text" id="prodName" class="form-control" name="prodName" ng-model="comp.prodFormData.prodName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="prodCategory" class="control-label col-sm-2">Category:</label>
+							<div class="col-sm-10">
+								<input type="text" id="prodCategory" class="form-control" name="prodCategory" ng-model="comp.prodFormData.prodCategory">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="price" class="control-label col-sm-2">Price ($):</label>
+							<div class="col-sm-10">
+								<input type="text" id="price" class="form-control" name="price" ng-model="comp.prodFormData.price">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="stock" class="control-label col-sm-2">Stock:</label>
+							<div class="col-sm-10">
+								<input type="number" id="stock" class="form-control" name="stock" ng-model="comp.prodFormData.stock">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<input type="button" class="form-control btn btn-primary" value="Submit" ng-click="uploadProduct(comp)">
+							</div>
+						</div>
+
+					</form>
+					<!--</div>-->
+				</li>
+			</ul>
+		</div>
+	</div>
+
+<script src="/js/indexTest.js"></script>
+
+</body>
+</html>
