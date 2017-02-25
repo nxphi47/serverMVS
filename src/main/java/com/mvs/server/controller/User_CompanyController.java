@@ -182,16 +182,12 @@ public class User_CompanyController {
 
 		Company company = this.companyRepository.findOne(companyId);
 		Product product = this.productRepository.findOne(id);
-//		Image image =  new Image(imgName, file.getOriginalFilename())
 		if (company != null && product != null) {
 			String folder = String.valueOf(company.getId());
 			String filename = file.getOriginalFilename();
 			Image image = new Image(imgName, file.getOriginalFilename(), folder, descript, date, product);
 
 			Image newImg = imageFileManager.uploadImageAsImage(file, image);
-//			List<Image> images = product.getImageList();
-//			images.add(newImg);
-//			product.setImageList(images);
 			logger.info(String.format("Save image %s in folder %s", filename, folder));
 			return this.productRepository.findOne(product.getId());
 		}

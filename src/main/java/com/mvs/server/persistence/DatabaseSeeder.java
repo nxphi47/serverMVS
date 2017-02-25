@@ -72,15 +72,17 @@ public class DatabaseSeeder implements CommandLineRunner {
 		List<Product> products = new ArrayList<>();
 		List<Image> images = new ArrayList<>();
 
+		// TODO: test database, to be removed in production
 		users.add(new User("Nguyen Xuan Phi", "nxphi47", "123456", "nxphi47@gmail.com", true));
-		users.add(new User("Dang Lien Chi", "chigalic", "123456", "chichi@gmail.com", true));
-		users.add(new User("Nguyen Xuan Phuong", "phuong", "123456", "pppp@gmail.com", true));
+		users.add(new User("John david", "david", "123456", "david@gmail.com", true));
+		users.add(new User("lara croft", "lara", "123456", "lara@gmail.com", true));
 
 		companies.add(new Company("Bookstore", "Books", "NTU", "637720"));
 		companies.add(new Company("Foodhunt", "Foods", "NTU", "637720"));
 
 		products.add(new Product("prod_1", "Quantum Physics", "science", 12.4, 20, companies.get(0)));
-		products.add(new Product("prod_2", "ahaihaihia", "science", 12.224, 50, companies.get(0)));
+		products.add(new Product("prod_2", "Computer science", "science", 12.224, 50, companies.get(0)));
+		
 
 //		users.get(0).setCompany(companies.get(0));
 		// saving
