@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<db>
+	<companies>
+		<company>
+			<companyName>BookStore</companyName>
+			<category>Books</category>
+			<address>NTU</address>
+			<postalCode>637720</postalCode>
+		</company>
+		<company>
+			<companyName>FootHunt</companyName>
+			<category>Foods</category>
+			<address>NTU</address>
+			<postalCode>637720</postalCode>
+		</company>
+	</companies>
+	<users>
+		<user compId="0">
+			<fullName>Nguyen Xuan Phi</fullName>
+			<userName>nxphi47</userName>
+			<password>123123123</password>
+			<email>nxphi47@gmail.com</email>
+			<confirmed>true</confirmed>
+		</user>
+		<user compId="0">
+			<fullName>fi fi</fullName>
+			<userName>xuanphi001</userName>
+			<password>123123123</password>
+			<email>xuanphi001@e.ntu.edu.sg</email>
+			<confirmed>true</confirmed>
+		</user>
+		<user>
+			<fullName>John david</fullName>
+			<userName>david</userName>
+			<password>123456</password>
+			<email>david@gmail.com</email>
+			<confirmed>true</confirmed>
+		</user>
+		<user>
+			<fullName>lara croft</fullName>
+			<userName>lara</userName>
+			<password>123456</password>
+			<email>lara@gmail.com</email>
+			<confirmed>true</confirmed>
+		</user>
+	</users>
+
+	<products>
+		<product compId="0">
+			<prodId>prod_1</prodId>
+			<prodName>Quantum Physics</prodName>
+			<prodCategory>science</prodCategory>
+			<price>12.2</price>
+			<stock>20</stock>
+		</product>
+		<product compId="0">
+			<prodId>prod_2</prodId>
+			<prodName>Computer science</prodName>
+			<prodCategory>science</prodCategory>
+			<price>30.2</price>
+			<stock>22</stock>
+		</product>
+	</products>
+	<images>
+
+	</images>
+</db>

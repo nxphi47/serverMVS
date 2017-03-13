@@ -32,7 +32,6 @@ public class Company {
 	private String address;
 	private String postalCode;
 
-//	@JsonIgnore //FIXME: must json ignore since it will cause infinite recursion
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
 //	@OrderBy("userName ASC") // FIXME: first consummer is the admin
 	@JsonManagedReference

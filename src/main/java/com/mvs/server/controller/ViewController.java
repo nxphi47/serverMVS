@@ -1,5 +1,8 @@
 package com.mvs.server.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mvs.server.model.Company;
+import com.mvs.server.model.User;
 import com.mvs.server.persistence.CompanyRepository;
 import com.mvs.server.persistence.ProductRepository;
 import com.mvs.server.persistence.UserRepository;
@@ -16,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * Created by nxphi on 2/24/2017.
@@ -27,8 +31,12 @@ import java.nio.file.Paths;
 public class ViewController {
 
 	private static final Logger logger = LoggerFactory.getLogger(User_CompanyController.class);
+
+	@Autowired
 	private UserRepository userRepository;
+	@Autowired
 	private CompanyRepository companyRepository;
+	@Autowired
 	private ProductRepository productRepository;
 
 	@Autowired
@@ -41,6 +49,17 @@ public class ViewController {
 	@RequestMapping(value = "")
 	public String index(Model model) throws IOException {
 		// testing
+		List<Company> companies = this.companyRepository.findAll();
+		if (companies != null) {
+			ObjectMapper mapper = new ObjectMapper();
+			String str = mapper.writeValueAsString(companies);
+//			str = str.replace("\"", "'");
+//			logger.info(str);
+			model.addAttribute("companies", str);
+		}
+		else {
+			model.addAttribute("user", "{}");
+		}
 
 		return "index";
 	}

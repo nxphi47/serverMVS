@@ -6,12 +6,10 @@ var app = angular.module("indexTestApp",[]);
 app.controller("indexTestController", ["$scope", "$rootScope", "$http", "$location", "$timeout",
 function ($scope,  $rootScope, $http, $location, $timeout) {
 
-	$scope.companies = [];
-
-	// retrieve
-	$http.get("rest/companies").success(function (res) {
-		console.log(res);
-		$scope.companies = res;
+	$scope.companies = []
+	
+	if (companies) {
+		$scope.companies = companies;
 		$.each($scope.companies, function (index, comp) {
 			comp.prodFormData = {
 				prodId: "",
@@ -21,11 +19,30 @@ function ($scope,  $rootScope, $http, $location, $timeout) {
 				stock: 0,
 			}
 		});
-	}).error(function (res) {
-		console.log("ERROR");
-		console.log(res);
-		alert("ERROR retrieve");
-	});
+	}
+	else {
+		console.log("ERRROR, companies not found")
+		// retrieve by ajax
+		$http.get("rest/companies").success(function (res) {
+			console.log(res);
+			$scope.companies = res;
+			$.each($scope.companies, function (index, comp) {
+				comp.prodFormData = {
+					prodId: "",
+					prodName: "",
+					prodCategory: "",
+					price: "",
+					stock: 0,
+				}
+			});
+		}).error(function (res) {
+			console.log("ERROR");
+			console.log(res);
+			alert("ERROR retrieve");
+		});
+	}
+
+
 
 
 	// upload function
