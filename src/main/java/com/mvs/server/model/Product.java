@@ -1,7 +1,9 @@
 package com.mvs.server.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.apache.xmlbeans.impl.xb.xsdschema.All;
 
 import javax.persistence.*;
 import java.util.*;
@@ -27,15 +29,22 @@ public class Product {
 
 
 	@ManyToOne
-	@JsonBackReference
+//	@JsonBackReference
+	@JsonIgnore
 	private Company company;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-	@JsonManagedReference
+//	@JsonManagedReference
 	private List<Image> imageList;
 
-	public Product()  {
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//	@JsonManagedReference
+	private List<Sale> saleList;
 
+	public Product()  {
+		setProdAttrs(new HashMap<>());
+		setSaleList(new ArrayList<>());
+		setImageList(new ArrayList<>());
 	}
 
 	public Product(String prodId, String prodName, String prodCategory, double price, int stock, Company company,
@@ -48,6 +57,9 @@ public class Product {
 		this.company = company;
 		this.prodCategory = prodCategory;
 		this.imageList = imageList;
+		setProdAttrs(new HashMap<>());
+		setSaleList(new ArrayList<>());
+		setImageList(new ArrayList<>());
 	}
 
 	public Product(String prodId, String prodName, String prodCategory, double price, int stock, Company company) {
@@ -127,5 +139,18 @@ public class Product {
 
 	public void setImageList(List<Image> imageList) {
 		this.imageList = imageList;
+	}
+
+	public List<Sale> getSaleList() {
+		return saleList;
+	}
+
+	public void setSaleList(List<Sale> saleList) {
+		this.saleList = saleList;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("product[name=%s, id=%s, price=%s", getProdName(), getId(), getPrice());
 	}
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <db>
+	<!--TODO: predefined database that is created once the program start | you may use these to test it.-->
 	<companies>
 		<company>
 			<companyName>BookStore</companyName>
@@ -16,17 +17,18 @@
 	</companies>
 	<users>
 		<user compId="0">
-			<fullName>Nguyen Xuan Phi</fullName>
-			<userName>nxphi47</userName>
+			<fullName>David Beckham</fullName>
+			<userName>beckham101</userName>
 			<password>123123123</password>
-			<email>nxphi47@gmail.com</email>
+			<email>beckham101@gmail.com</email>
 			<confirmed>true</confirmed>
+			<isOwner>true</isOwner>
 		</user>
 		<user compId="0">
 			<fullName>fi fi</fullName>
 			<userName>xuanphi001</userName>
 			<password>123123123</password>
-			<email>xuanphi001@e.ntu.edu.sg</email>
+			<email>fifi@e.ntu.edu.sg</email>
 			<confirmed>true</confirmed>
 		</user>
 		<user>
@@ -60,8 +62,88 @@
 			<price>30.2</price>
 			<stock>22</stock>
 		</product>
+		<product compId="0">
+			<prodId>prod_3</prodId>
+			<prodName>Literature</prodName>
+			<prodCategory>science</prodCategory>
+			<price>22.3</price>
+			<stock>10</stock>
+		</product>
+		<product compId="0">
+			<prodId>prod_4</prodId>
+			<prodName>Algorithm</prodName>
+			<prodCategory>science</prodCategory>
+			<price>50.99</price>
+			<stock>20</stock>
+		</product>
+		<product compId="0">
+			<prodId>prod_5</prodId>
+			<prodName>Mathematics</prodName>
+			<prodCategory>science</prodCategory>
+			<price>5</price>
+			<stock>70</stock>
+		</product>
+		<product compId="0">
+			<prodId>prod_6</prodId>
+			<prodName>Economics</prodName>
+			<prodCategory>science</prodCategory>
+			<price>30.1</price>
+			<stock>2</stock>
+		</product>
+		<product compId="0">
+			<prodId>prod_7</prodId>
+			<prodName>Bussiness</prodName>
+			<prodCategory>Business</prodCategory>
+			<price>42.4</price>
+			<stock>9</stock>
+		</product>
 	</products>
 	<images>
 
 	</images>
+	<sales>
+		<sale buyerId="2" productId="1">
+			<saleCategory>Online</saleCategory>
+			<descript>David buy</descript>
+			<price></price>
+			<quantity>5</quantity>
+		</sale>
+		<sale buyerId="2" productId="2">
+			<saleCategory>Online</saleCategory>
+			<descript>David buy</descript>
+			<price></price>
+			<quantity>10</quantity>
+		</sale>
+		<sale buyerId="2" productId="3">
+			<saleCategory>Online</saleCategory>
+			<descript>David buy</descript>
+			<price></price>
+			<quantity>1</quantity>
+		</sale>
+		<sale buyerId="2" productId="5">
+			<saleCategory>Online</saleCategory>
+			<descript>David buy</descript>
+			<price></price>
+			<quantity>2</quantity>
+		</sale>
+		<sale buyerId="2" productId="0">
+			<saleCategory>Online</saleCategory>
+			<descript>David buy</descript>
+			<price></price>
+			<quantity>4</quantity>
+		</sale>
+		<sale buyerId="2" productId="4">
+			<saleCategory>Online</saleCategory>
+			<descript>David buy</descript>
+			<price></price>
+			<quantity>9</quantity>
+		</sale>
+		<sale buyerId="2" productId="6">
+			<saleCategory>Online</saleCategory>
+			<descript>David buy</descript>
+			<price></price>
+			<quantity>4</quantity>
+		</sale>
+
+	</sales>
 </db>

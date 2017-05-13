@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="84.00148809523796" y="0.0">com.mvs.server.model.Image</node>
+    <node x="91.12014751552778" y="416.0">com.mvs.server.persistence.DatabaseSeeder</node>
+    <node x="79.30764751552778" y="237.0">com.mvs.server.model.User</node>
+    <node x="599.8943452380951" y="416.0">com.mvs.server.controller.User_CompanyController</node>
+    <node x="192.25148809523793" y="237.0">com.mvs.server.persistence.ProductRepository</node>
+    <node x="342.25148809523796" y="237.0">com.mvs.server.persistence.UserRepository</node>
+    <node x="473.25148809523796" y="237.0">com.mvs.server.persistence.CompanyRepository</node>
+    <node x="0.0" y="490.0">com.mvs.server.model.TestModel</node>
+    <node x="50.807647515527776" y="158.0">com.mvs.server.model.Company</node>
+    <node x="655.251488095238" y="237.0">com.mvs.server.utils.filemanager.ImageFileManager</node>
+    <node x="679.6409808488611" y="158.0">com.mvs.server.utils.filemanager.FileManager</node>
+    <node x="538.6409808488611" y="158.0">com.mvs.server.persistence.ImageRepository</node>
+    <node x="310.26766304347825" y="416.0">com.mvs.server.controller.ViewController</node>
+    <node x="43.47431418219446" y="79.0">com.mvs.server.model.Product</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.mvs.server.controller.User_CompanyController" target="com.mvs.server.utils.filemanager.FileManager">
+      <point x="47.14285714285711" y="-14.5" />
+      <point x="729.5372023809522" y="386.0" />
+      <point x="798.251488095238" y="386.0" />
+      <point x="798.251488095238" y="217.0" />
+      <point x="760.4743141821945" y="217.0" />
+      <point x="32.33333333333337" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.controller.ViewController" target="com.mvs.server.persistence.UserRepository">
+      <point x="13.75" y="-14.5" />
+      <point x="379.01766304347825" y="376.0" />
+      <point x="397.75148809523796" y="376.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.controller.ViewController" target="com.mvs.server.persistence.CompanyRepository">
+      <point x="41.25" y="-14.5" />
+      <point x="406.51766304347825" y="396.0" />
+      <point x="543.251488095238" y="396.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.model.Company" target="com.mvs.server.model.User">
+      <point x="28.0" y="14.5" />
+      <point x="13.75" y="-14.5" />
+    </edge>
+    <edge source="com.mvs.server.controller.ViewController" target="com.mvs.server.model.User">
+      <point x="-41.25" y="-14.5" />
+      <point x="324.01766304347825" y="336.0" />
+      <point x="120.55764751552778" y="336.0" />
+      <point x="13.75" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.persistence.DatabaseSeeder" target="com.mvs.server.persistence.CompanyRepository">
+      <point x="50.3125" y="-14.5" />
+      <point x="198.93264751552778" y="386.0" />
+      <point x="496.5848214285712" y="386.0" />
+      <point x="-46.666666666666686" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.controller.User_CompanyController" target="com.mvs.server.persistence.ProductRepository">
+      <point x="-70.71428571428578" y="-14.5" />
+      <point x="611.6800595238093" y="316.0" />
+      <point x="300.58482142857133" y="316.0" />
+      <point x="43.33333333333337" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.persistence.DatabaseSeeder" target="com.mvs.server.persistence.UserRepository">
+      <point x="35.9375" y="-14.5" />
+      <point x="184.55764751552778" y="376.0" />
+      <point x="360.75148809523796" y="376.0" />
+      <point x="-37.0" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.controller.User_CompanyController" target="com.mvs.server.persistence.UserRepository">
+      <point x="-47.14285714285711" y="-14.5" />
+      <point x="635.251488095238" y="306.0" />
+      <point x="434.75148809523796" y="306.0" />
+      <point x="37.0" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.controller.User_CompanyController" target="com.mvs.server.persistence.CompanyRepository">
+      <point x="-23.571428571428555" y="-14.5" />
+      <point x="658.8229166666665" y="296.0" />
+      <point x="589.9181547619046" y="296.0" />
+      <point x="46.66666666666663" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.model.Product" target="com.mvs.server.model.Company">
+      <point x="24.666666666666686" y="14.5" />
+      <point x="105.14098084886115" y="133.0" />
+      <point x="113.80764751552778" y="133.0" />
+      <point x="21.0" y="-14.5" />
+    </edge>
+    <edge source="com.mvs.server.persistence.DatabaseSeeder" target="com.mvs.server.persistence.ProductRepository">
+      <point x="21.5625" y="-14.5" />
+      <point x="170.18264751552778" y="366.0" />
+      <point x="213.9181547619046" y="366.0" />
+      <point x="-43.33333333333334" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.controller.User_CompanyController" target="com.mvs.server.model.Image">
+      <point x="70.71428571428578" y="-14.5" />
+      <point x="753.1086309523808" y="396.0" />
+      <point x="811.751488095238" y="396.0" />
+      <point x="811.751488095238" y="59.0" />
+      <point x="138.16815476190465" y="59.0" />
+      <point x="21.666666666666686" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.controller.User_CompanyController" target="com.mvs.server.utils.filemanager.ImageFileManager">
+      <point x="23.571428571428555" y="-14.5" />
+      <point x="705.9657738095236" y="396.0" />
+      <point x="720.251488095238" y="396.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.persistence.DatabaseSeeder" target="com.mvs.server.model.Company">
+      <point x="-35.9375" y="-14.5" />
+      <point x="112.68264751552778" y="386.0" />
+      <point x="52.43432971014499" y="386.0" />
+      <point x="52.43432971014499" y="217.0" />
+      <point x="64.80764751552778" y="217.0" />
+      <point x="-28.0" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.model.Company" target="com.mvs.server.model.Product">
+      <point x="-21.0" y="-14.5" />
+      <point x="71.80764751552778" y="133.0" />
+      <point x="80.47431418219446" y="133.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.model.Product" target="com.mvs.server.model.Image">
+      <point x="-18.5" y="-14.5" />
+      <point x="61.97431418219446" y="49.0" />
+      <point x="94.83482142857127" y="49.0" />
+      <point x="-21.66666666666667" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.persistence.DatabaseSeeder" target="com.mvs.server.persistence.ImageRepository">
+      <point x="-7.1875" y="-14.5" />
+      <point x="141.43264751552778" y="346.0" />
+      <point x="154.9879011387162" y="346.0" />
+      <point x="154.9879011387162" y="207.0" />
+      <point x="558.8076475155277" y="207.0" />
+      <point x="-40.33333333333337" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.persistence.DatabaseSeeder" target="com.mvs.server.utils.filemanager.FileManager">
+      <point x="7.1875" y="-14.5" />
+      <point x="155.80764751552778" y="356.0" />
+      <point x="181.75148809523793" y="356.0" />
+      <point x="181.75148809523793" y="217.0" />
+      <point x="695.8076475155277" y="217.0" />
+      <point x="-32.33333333333337" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.model.User" target="com.mvs.server.model.Company">
+      <point x="-13.75" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.persistence.DatabaseSeeder" target="com.mvs.server.model.Product">
+      <point x="-50.3125" y="-14.5" />
+      <point x="98.30764751552778" y="396.0" />
+      <point x="26.0" y="396.0" />
+      <point x="26.0" y="133.0" />
+      <point x="55.807647515527776" y="133.0" />
+      <point x="-24.666666666666686" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.controller.ViewController" target="com.mvs.server.persistence.ProductRepository">
+      <point x="-13.75" y="-14.5" />
+      <point x="351.51766304347825" y="326.0" />
+      <point x="257.25148809523796" y="326.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.model.Image" target="com.mvs.server.model.Product">
+      <point x="0.0" y="14.5" />
+      <point x="116.50148809523796" y="59.0" />
+      <point x="98.97431418219446" y="59.0" />
+      <point x="18.5" y="-14.5" />
+    </edge>
+    <edge source="com.mvs.server.utils.filemanager.ImageFileManager" target="com.mvs.server.persistence.ImageRepository">
+      <point x="-32.5" y="-14.5" />
+      <point x="687.751488095238" y="207.0" />
+      <point x="639.4743141821945" y="207.0" />
+      <point x="40.33333333333337" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.utils.filemanager.ImageFileManager" target="com.mvs.server.utils.filemanager.FileManager">
+      <point x="32.5" y="-14.5" />
+      <point x="752.751488095238" y="217.0" />
+      <point x="728.1409808488611" y="217.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.persistence.DatabaseSeeder" target="com.mvs.server.model.User">
+      <point x="-21.5625" y="-14.5" />
+      <point x="127.05764751552778" y="376.0" />
+      <point x="93.05764751552778" y="376.0" />
+      <point x="-13.75" y="14.5" />
+    </edge>
+    <edge source="com.mvs.server.controller.User_CompanyController" target="com.mvs.server.persistence.ImageRepository">
+      <point x="0.0" y="-14.5" />
+      <point x="682.3943452380951" y="286.0" />
+      <point x="623.751488095238" y="286.0" />
+      <point x="623.751488095238" y="207.0" />
+      <point x="599.1409808488611" y="207.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="406.0" y="259.5" />
+  <SelectedNodes>
+    <node>com.mvs.server.controller.User_CompanyController</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

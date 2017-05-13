@@ -1,13 +1,14 @@
 package com.mvs.server.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by nxphi on 2/25/2017.
- * This Entity store information about products (many to one)
+ * This entity store information about image that are uploaded
  */
 
 @Entity
@@ -26,7 +27,8 @@ public class Image {
 	private Date dateCreated;
 
 	@ManyToOne
-	@JsonBackReference
+//	@JsonBackReference
+	@JsonIgnore
 	private Product product;
 
 	//default constructor

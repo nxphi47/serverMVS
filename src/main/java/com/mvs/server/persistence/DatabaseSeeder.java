@@ -1,9 +1,6 @@
 package com.mvs.server.persistence;
 
-import com.mvs.server.model.Company;
-import com.mvs.server.model.Image;
-import com.mvs.server.model.Product;
-import com.mvs.server.model.User;
+import com.mvs.server.model.*;
 import com.mvs.server.utils.filemanager.FileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 //import javax.swing.text.Document;
@@ -27,11 +25,13 @@ import org.w3c.dom.*;
 
 /**
  * Created by nxphi on 2/24/2017.
- * the command line runner to initialize the database, clear previous files...
+ * the command line runner to initialize the database base on predefined_db, clear previous files...
+ * the seeder is a component on spring application
  */
 
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
+	private static final String predefinedDB = "./src/main/webapp/uploads/";
 
 	private static final Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
 	private UserRepository userRepository;
@@ -42,8 +42,13 @@ public class DatabaseSeeder implements CommandLineRunner {
 //	@Autowired
 //	private HttpServletRequest request;
 
+//	Filemanager, as like other service, will be injected by spring via Autowired annotation.
 	@Autowired
 	private FileManager  fileManager;
+
+
+	@Autowired
+	private SaleRepository saleRepository;
 
 	@Autowired
 	public DatabaseSeeder(UserRepository userRepository, CompanyRepository companyRepository,
@@ -57,17 +62,24 @@ public class DatabaseSeeder implements CommandLineRunner {
 	//FIXME: this is a workaround to delete all files in uploads/ when the HttpServlet is not loaded on startup
 	public void deleteAllFiles() {
 		try {
-			String path = new File("./src/main/webapp/uploads/").getCanonicalPath();
+			String path = new File(predefinedDB).getCanonicalPath();
 			logger.info("delete file: " + path);
 			File file = new File(path);
 			for (File subFile: file.listFiles()) {
-				FileSystemUtils.deleteRecursively(subFile);
+				if (!subFile.getName().equals("placeholder.jpg")) {
+					FileSystemUtils.deleteRecursively(subFile);
+				}
 			}
 		} catch (IOException io) {
 			logger.info("DELETE FILES error: " + io.getMessage());
 		}
 	}
 
+
+	/*
+	This method run automatically once each time the program start
+	It read a XMl file to initialize the database and delete any images and file ever stored previously
+	 */
 	@Override
 	public void run(String... strings) throws Exception {
 		List<User> users = new ArrayList<>();
@@ -130,17 +142,48 @@ public class DatabaseSeeder implements CommandLineRunner {
 								companies.get(compId)));
 					}
 				}
+
+
+
+
+				// for sale which required others ID
+
+				NodeList saleList = doc.getElementsByTagName("sale");
+				List<Sale> sales = new ArrayList<>();
+				for (int i = 0; i < saleList.getLength(); i++) {
+					Node node = saleList.item(i);
+					if (node.getNodeType() == Node.ELEMENT_NODE) {
+						Element ele = (Element) node;
+						int buyerId = Integer.parseInt(ele.getAttribute("buyerId"));
+						int productId = Integer.parseInt(ele.getAttribute("productId"));
+//						Product product = productRepository.findOne((long) productId);
+//						if (product == null) {
+//							System.out.printf("Cannot find product: %s", productId);
+//						}
+						Sale theSale = new Sale("",
+								ele.getElementsByTagName("saleCategory").item(0).getTextContent(),
+								ele.getElementsByTagName("descript").item(0).getTextContent(),
+								products.get(productId),
+								users.get(buyerId), null,
+								products.get(productId).getPrice(),
+								Integer.parseInt(ele.getElementsByTagName("quantity").item(0).getTextContent()),
+								0, new Date());
+						theSale.setTotal(theSale.getPrice() * theSale.getQuantity());
+						sales.add(theSale);
+					}
+				}
+				// saving
+				companyRepository.save(companies);
+				userRepository.save(users);
+				productRepository.save(products);
+				imageRepository.save(images);
+				saleRepository.save(sales);
+				// for sale
 				logger.info("Finish import from predefined database", DatabaseSeeder.class);
 			}
 		} catch (FileNotFoundException notFound) {
 			logger.error("UNABLE to load predefinedDB.xml", DatabaseSeeder.class);
 		}
-
-		// saving
-		companyRepository.save(companies);
-		userRepository.save(users);
-		productRepository.save(products);
-		imageRepository.save(images);
 
 		//FIXME: be care full with this
 		deleteAllFiles();

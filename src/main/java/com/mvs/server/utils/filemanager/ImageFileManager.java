@@ -60,6 +60,7 @@ public class ImageFileManager extends FileManager {
 	// this return the image it self that is save to database
 	public Image uploadImageAsImage(MultipartFile file, Image image) throws IOException {
 		Image newImg = this.imageRepository.save(image);
+		System.out.printf("filename: %s, %s, %s\n", file.getOriginalFilename(), file.getName(), file.getSize());
 		newImg.setFileName(ImgFileNameconcat(file.getOriginalFilename(), newImg.getId()));
 		newImg = this.imageRepository.save(newImg);
 		// uploading
@@ -80,7 +81,9 @@ public class ImageFileManager extends FileManager {
 
 	// this add abc.jpg -> abc_1.jpg
 	public static String ImgFileNameconcat(String fileName, long id) {
+		System.out.printf("file name %s ", fileName);
 		fileName = fileName.substring(0, fileName.lastIndexOf(".")) + "_" + id + fileName.substring(fileName.lastIndexOf("."));
+		System.out.printf("filename after %s\n", fileName);
 		return fileName;
 	}
 

@@ -1,5 +1,10 @@
 package com.mvs.server.utils.filemanager;
 
+import com.mvs.server.persistence.CompanyRepository;
+import com.mvs.server.persistence.ImageRepository;
+import com.mvs.server.persistence.ProductRepository;
+import com.mvs.server.persistence.UserRepository;
+import com.mvs.server.utils.MVSService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +30,18 @@ import java.nio.file.Paths;
  */
 
 @Service
-public class FileManager {
+public class FileManager implements MVSService {
 	protected static final String rootPath = "/uploads";
 	protected static final Logger logger = LoggerFactory.getLogger(FileManager.class);
+
+	@Autowired
+	protected CompanyRepository companyRepository;
+	@Autowired
+	protected ImageRepository imageRepository;
+	@Autowired
+	protected ProductRepository productRepository;
+	@Autowired
+	protected UserRepository userRepository;
 
 	@Autowired
 	private HttpServletRequest request;
@@ -108,4 +122,5 @@ public class FileManager {
 			return null;
 		}
 	}
+
 }

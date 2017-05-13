@@ -19,8 +19,18 @@ public class UserValidator {
 
 	}
 
+	public User validateUser(User user) {
+		return this.userRepository.findByUserNameAndPassword(user.getUserName(), user.getPassword());
+	}
+
 	public boolean validateUserName(User user) {
 		User retrieved = this.userRepository.findByUserName(user.getUserName());
 		return (retrieved == null);
+	}
+
+	public boolean validatePassword(User user) {
+		User retrieved = this.userRepository.findByUserNameAndPassword(user.getUserName(), user.getPassword());
+		return (retrieved == null);
+
 	}
 }

@@ -6,6 +6,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by nxphi on 2/24/2017.
@@ -33,13 +39,37 @@ public class User {
 
 	private boolean confirmed;
 
+	private boolean isOwner;
+
 	// extrinsic attributes - to be added when combining object, ->comes with @Transient tag
 	@ManyToOne
-	@JsonBackReference
+//	@JsonBackReference
+	@JsonIgnore
 	private Company company;
 
-	public User() {
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Company> targetingCompany;
 
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	@JsonManagedReference
+	private List<Sale> saleAsOwnerList;
+
+	@OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	@JsonManagedReference
+	private List<Sale> saleAsBuyerList;
+
+
+	public User() {
+		this.isOwner = false;
+		this.confirmed = false;
+		this.fullName = "";
+		this.password = "";
+		this.email = "";
+		this.userName = "";
+		setSaleAsBuyerList(new ArrayList<>());
+		setSaleAsOwnerList(new ArrayList<>());
+		setTargetingCompany(new HashSet<>());
 	}
 
 	public User(String fullName, String userName, String password, String email, boolean confirmed, Company company) {
@@ -49,6 +79,10 @@ public class User {
 		this.email = email;
 		this.confirmed = confirmed;
 		this.company = company;
+		this.isOwner = false;
+		setSaleAsBuyerList(new ArrayList<>());
+		setSaleAsOwnerList(new ArrayList<>());
+		setTargetingCompany(new HashSet<>());
 	}
 
 	public User(String fullName, String userName, String password, String email, boolean confirmed) {
@@ -122,5 +156,37 @@ public class User {
 //	@JsonIgnore
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+
+	public boolean isOwner() {
+		return isOwner;
+	}
+
+	public void setOwner(boolean owner) {
+		isOwner = owner;
+	}
+
+	public List<Sale> getSaleAsOwnerList() {
+		return saleAsOwnerList;
+	}
+
+	public void setSaleAsOwnerList(List<Sale> saleAsOwnerList) {
+		this.saleAsOwnerList = saleAsOwnerList;
+	}
+
+	public List<Sale> getSaleAsBuyerList() {
+		return saleAsBuyerList;
+	}
+
+	public void setSaleAsBuyerList(List<Sale> saleAsBuyerList) {
+		this.saleAsBuyerList = saleAsBuyerList;
+	}
+
+	public Set<Company> getTargetingCompany() {
+		return targetingCompany;
+	}
+
+	public void setTargetingCompany(Set<Company> targetingCompany) {
+		this.targetingCompany = targetingCompany;
 	}
 }

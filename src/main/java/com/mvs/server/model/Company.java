@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by nxphi on 2/24/2017.
@@ -32,14 +29,21 @@ public class Company {
 	private String address;
 	private String postalCode;
 
-	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-//	@OrderBy("userName ASC") // FIXME: first consummer is the admin
-	@JsonManagedReference
-	private List<User> userList;
+	private double revenue;
+	private double profit;
+	private double capital;
 
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	@OrderBy("prodId ASC")
-	@JsonManagedReference
+//	@OrderBy("userName ASC") // FIXME: first consummer is the admin
+//	@JsonManagedReference
+	private List<User> userList;
+
+	@ManyToMany(mappedBy = "targetingCompany", cascade = CascadeType.ALL)
+	private Set<User> targetedUserList;
+
+	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+//	@OrderBy("prodId ASC")
+//	@JsonManagedReference
 	private List<Product> productList;
 
 	// admin user
@@ -49,6 +53,10 @@ public class Company {
 	public Company() {
 		userList = new ArrayList<>();
 		productList = new ArrayList<>();
+		targetedUserList = new HashSet<>();
+		revenue = 0.0;
+		profit = 0.0;
+		capital = 0.0;
 	}
 
 	// the core constructor, combine all value
@@ -60,6 +68,7 @@ public class Company {
 		this.category = category;
 		this.address  = address;
 		this.postalCode = postalCode;
+
 	}
 
 //	public Company(String companyName, String category, String address, String postalCode) {
@@ -138,6 +147,38 @@ public class Company {
 
 	public void setProductList(List<Product> productList) {
 		this.productList = productList;
+	}
+
+	public double getRevenue() {
+		return revenue;
+	}
+
+	public void setRevenue(double revenue) {
+		this.revenue = revenue;
+	}
+
+	public double getProfit() {
+		return profit;
+	}
+
+	public void setProfit(double profit) {
+		this.profit = profit;
+	}
+
+	public double getCapital() {
+		return capital;
+	}
+
+	public void setCapital(double capital) {
+		this.capital = capital;
+	}
+
+	public Set<User> getTargetedUserList() {
+		return targetedUserList;
+	}
+
+	public void setTargetedUserList(Set<User> targetedUserList) {
+		this.targetedUserList = targetedUserList;
 	}
 
 

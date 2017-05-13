@@ -1,15 +1,16 @@
 package com.mvs.server.controller;
 
-import com.mvs.server.model.Company;
-import com.mvs.server.model.Image;
-import com.mvs.server.model.Product;
-import com.mvs.server.model.User;
+import com.mvs.server.model.*;
 import com.mvs.server.persistence.CompanyRepository;
 import com.mvs.server.persistence.ImageRepository;
 import com.mvs.server.persistence.ProductRepository;
 import com.mvs.server.persistence.UserRepository;
+import com.mvs.server.utils.databasemanagement.JpaServiceFactory;
 import com.mvs.server.utils.filemanager.FileManager;
 import com.mvs.server.utils.filemanager.ImageFileManager;
+import com.mvs.server.utils.filemanager.ProdAndImgExcelManager;
+import com.mvs.server.utils.transaction.Transaction;
+import com.mvs.server.utils.transaction.TransactionFactory;
 import com.mvs.server.utils.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.*;
@@ -28,20 +29,24 @@ import java.util.*;
 /**
  * Created by nxphi on 2/24/2017.
  * Rest controller to control user and company information
+ * Only handle ajax or rest request from front end - no view request here.
  */
 
 @RestController
 @RequestMapping(value = "/rest") // Indicate the REST path for JSON and file inject
-public class User_CompanyController {
+public class RestServiceController {
 
-	private static final Logger logger = LoggerFactory.getLogger(User_CompanyController.class);
+	private static final Logger logger = LoggerFactory.getLogger(RestServiceController.class);
 	private UserRepository userRepository;
 	private CompanyRepository companyRepository;
 	private ProductRepository productRepository;
 	private ImageRepository imageRepository;
 
 	@Autowired
-	private HttpServletRequest request;
+	private JpaServiceFactory jpaServiceFactory;
+
+	@Autowired
+	private TransactionFactory transactionFactory;
 
 	@Autowired
 	private FileManager fileManager;
@@ -53,8 +58,11 @@ public class User_CompanyController {
 	private UserValidator userValidator;
 
 	@Autowired
-	public User_CompanyController(UserRepository userRepository, CompanyRepository companyRepository,
-								  ProductRepository productRepository, ImageRepository imageRepository ) {
+	private ProdAndImgExcelManager prodAndImgExcelManager;
+
+	@Autowired
+	public RestServiceController(UserRepository userRepository, CompanyRepository companyRepository,
+								 ProductRepository productRepository, ImageRepository imageRepository ) {
 		this.userRepository = userRepository;
 		this.companyRepository = companyRepository;
 		this.productRepository = productRepository;
@@ -63,6 +71,7 @@ public class User_CompanyController {
 
 	// ---------------- formal retrieval mapping -------------------------
 
+//	this group handle any request regarding retrieving some information
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public List<User> getUsers() {
 		return this.userRepository.findAll();
@@ -90,6 +99,7 @@ public class User_CompanyController {
 			return new ArrayList<>();
 		}
 	}
+
 	@RequestMapping(value = "/company/{id}", method = RequestMethod.GET)
 	public Company getCompany(@PathVariable long id) {
 		return this.companyRepository.findOne(id);
@@ -106,11 +116,13 @@ public class User_CompanyController {
 		return imageRepository.findAll();
 	}
 
+
 	// ----------------- formal POST submision mapping ---------------------
+	// these request is post request relating submiing a POST form from front end
 	@RequestMapping(value = "/user/create", method = RequestMethod.POST)
 	public User createUser(@RequestBody User user) {
 		if (userValidator.validateUserName(user)) {
-			// create
+			// create the user if username not exists
 			if (user.getCompany() != null) {
 				Company company = this.companyRepository.findOne(user.getCompany().getId());
 				if (company != null) {
@@ -123,14 +135,41 @@ public class User_CompanyController {
 			else {
 				logger.info("Create user: get company is null");
 			}
-			//Save without confirming
-			User afterSave = this.userRepository.save(user);
-			return afterSave;
+
+//			pushing to DB
+			return this.userRepository.save(user);
 		}
 		else {
 			return null;
 		}
 		// if same username, return null
+	}
+
+	@RequestMapping(value = "/company/create", method = RequestMethod.POST)
+//	public Company createCompany(@RequestParam(value = "companyName") String companyName,
+//								 @RequestParam(value = "category") String category,
+//								 @RequestParam(value = "address") String address,
+//								 @RequestParam(value = "postalCode") String postalCode) {
+//		Company company = new Company(companyName, category, address, postalCode);
+	public Company createCompany(@RequestBody Company company) {
+		if (companyRepository.findByCompanyName(company.getCompanyName()) == null) {
+			return companyRepository.save(company);
+		}
+		else {
+			return null;
+		}
+	}
+
+	@RequestMapping(value = "/test/create", method = RequestMethod.POST)
+	public Company test(@RequestBody Map<String, Image> map){
+		Image image = map.get("img");
+		if (image == null) {
+			System.out.printf("image null\n");
+		}
+		else {
+			System.out.printf("%s %s %s\n", image.getDescript(), image.getFileName(), image.getImgName());
+		}
+		return companyRepository.findOne((long) 1);
 	}
 
 	// add to an existing user
@@ -144,7 +183,7 @@ public class User_CompanyController {
 			return this.companyRepository.getOne(id);
 		}
 		else {
-			logger.info(String.format("Company %s add user %s error", id, user));
+			logger.info(String.format("Company %s add user null error", id));
 			return null;
 		}
 	}
@@ -171,24 +210,45 @@ public class User_CompanyController {
 		}
 	}
 
+	// add multiple products with company
+	@RequestMapping(value = "/company/{id}/add/product/multiple")
+	public Company uploadProductImgViaExcel(@PathVariable long id,
+													   @RequestParam(value = "excelFile") MultipartFile excelFile,
+													   @RequestParam(value = "imgFile[]") MultipartFile[] imgFiles) throws IOException {
+//		change this one to factory
+
+		File excel = fileManager.uploadMultipartAsFile(excelFile, String.format("%s", id), excelFile.getOriginalFilename());
+		ArrayList<MultipartFile> imgArrayList = new ArrayList<>(Arrays.asList(imgFiles));
+		prodAndImgExcelManager.setMyExtraMultipart(imgArrayList);
+		prodAndImgExcelManager.processExcel(id, String.format("%s", id), excelFile.getOriginalFilename(), 0);
+
+		return companyRepository.findOne(id);
+	}
+
 	// upload image to product - form file
 	@RequestMapping(value = "/product/{id}/uploadImg", method = RequestMethod.POST)
 	public Product uploadImgToProd(@PathVariable long id,
-								   @RequestParam(value = "file") MultipartFile file,
 								   @RequestParam(value = "companyId") long companyId,
 								   @RequestParam(value = "imgName") String imgName,
 								   @RequestParam(value = "dateCreated") @DateTimeFormat(pattern = "yyyy-MM-d") Date date,
-								   @RequestParam(value = "descript") String descript) throws IOException {
+								   @RequestParam(value = "descript") String descript,
+								   @RequestParam(value = "file[]") MultipartFile[] files) throws IOException {
 
 		Company company = this.companyRepository.findOne(companyId);
 		Product product = this.productRepository.findOne(id);
 		if (company != null && product != null) {
 			String folder = String.valueOf(company.getId());
-			String filename = file.getOriginalFilename();
-			Image image = new Image(imgName, file.getOriginalFilename(), folder, descript, date, product);
+			if (files == null || files.length == 0) {
+				logger.error("Not file found!");
+				return null;
+			}
+			for (MultipartFile file: files) {
+				String filename = file.getOriginalFilename();
+				Image image = new Image(imgName, file.getOriginalFilename(), folder, descript, date, product);
 
-			Image newImg = imageFileManager.uploadImageAsImage(file, image);
-			logger.info(String.format("Save image %s in folder %s", filename, folder));
+				Image newImg = imageFileManager.uploadImageAsImage(file, image);
+				logger.info(String.format("Save image %s in folder %s", filename, folder));
+			}
 			return this.productRepository.findOne(product.getId());
 		}
 		else {
@@ -198,13 +258,32 @@ public class User_CompanyController {
 		}
 	}
 
+	// ___________________-- execution--_____________________
+	// when a purchase is created.
+	@RequestMapping(value = "/company/{compId}/user/{userId}/purchase", method = RequestMethod.POST)
+	public ModelWrapper purchase(@PathVariable long userId, @PathVariable long compId, @RequestBody ModelWrapper modelWrapper) {
+		User user = modelWrapper.getUser();
+		List<Sale> sales = modelWrapper.getSaleList();
+		List<Product> products = modelWrapper.getProductList();
+		System.out.printf("Users: %s\n", user);
+		System.out.printf("Sale: %s\n", sales);
+		System.out.printf("prods: %s\n", products);
+
+//		get the transaction type
+		Transaction purchase = transactionFactory.getInstance(TransactionFactory.Type.PURCHASE);
+		purchase.importData(user, sales, products);
+		List<Sale> afterSale = (List<Sale>) purchase.execute();
+		ModelWrapper returnVal = new ModelWrapper();
+		returnVal.setSaleList(afterSale);
+		returnVal.setCompany(companyRepository.findOne(compId));
+		return returnVal;
+	}
 
 	// controller
 	@RequestMapping(value = "")
 	public String getDefault() {
 		return "hello world";
 	}
-
 
 	@RequestMapping(value = "/companies/addUser", method = RequestMethod.GET)
 	public List<Company> addUSer(@RequestParam(value = "username") String userName, @RequestParam(value = "companyName") String companyName) {
@@ -214,7 +293,6 @@ public class User_CompanyController {
 			//FIXME: only need to set user.setCompany(), the reverse is automatically added!!!!!!!!
 			user.setCompany(company);
 			this.userRepository.save(user);
-//			logger.info("add user found and save!: ");
 		}
 		else {
 			logger.info("add user found null!");
@@ -227,4 +305,6 @@ public class User_CompanyController {
 	public ResponseEntity<Resource> getTestFile() throws MalformedURLException {
 		return fileManager.getFileAsHttpBody("test", "testFile.png");
 	}
+
+	//404
 }
